@@ -144,7 +144,7 @@
       roof = `<polygon points="${x0 - 14},${wallTop - rise} ${x1 + 14},${wallTop + 4} ${x1 + 14},${wallTop + 10} ${x0 - 14},${wallTop - rise + 6}" fill="${c}"/>`;
       labels = `<text x="${(x0 + x1) / 2}" y="${wallTop - rise / 2 - 12}" fill="#c9d3e6" font-size="11" text-anchor="middle">${e.sheetLen} m sheets</text>`;
     }
-    return `<svg viewBox="0 0 320 170" xmlns="http://www.w3.org/2000/svg" font-family="Manrope, sans-serif" role="img" aria-label="Roof diagram">
+    return `<svg viewBox="0 0 320 170" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif" role="img" aria-label="Roof diagram">
       <rect x="${x0}" y="${wallTop}" width="${span}" height="${wallBot - wallTop}" fill="#2a3b60"/>
       <rect x="${x0 + 30}" y="${wallTop + 10}" width="22" height="18" rx="2" fill="#41598a"/><rect x="${x1 - 52}" y="${wallTop + 10}" width="22" height="18" rx="2" fill="#41598a"/>
       ${roof}
