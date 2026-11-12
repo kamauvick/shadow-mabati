@@ -107,7 +107,7 @@
   /* ---------- chrome ---------- */
   function renderChrome() {
     // [label, target]: targets starting with "#" are sections on the home page
-    const nav = [["Shop", "shop.html"], ["Virtual visualiser", "#visualiser"], ["Cost calculator", "#calculator"], ["Why us", "#why"], ["About", "#about"], ["FAQ", "#faq"], ["Contact", "#contact"]];
+    const nav = [["Shop", "shop.html"], ["Virtual visualiser", "#visualiser"], ["Cost calculator", "#calculator"], ["About", "#about"], ["FAQ", "#faq"], ["Contact", "#contact"]];
     const navLink = ([t, h]) => {
       const href = h.startsWith("#") ? homeHref(h) : h;
       const active = h === "shop.html" && document.body.dataset.page === "shop";
@@ -140,7 +140,7 @@
             <li><a href="shop.html?cat=Gutters%20%26%20Downpipes">Gutters & downpipes</a></li>
             <li><a href="shop.html?cat=Fixings">Nails & fixings</a></li></ul></div>
           <div><h4>Company</h4><ul>
-            <li><a href="${homeHref("#about")}">About us</a></li><li><a href="${homeHref("#why")}">Our guarantee</a></li>
+            <li><a href="${homeHref("#about")}">About us</a></li><li><a href="${homeHref("#visualiser")}">Roof visualiser</a></li>
             <li><a href="${homeHref("#calculator")}">Roof calculator</a></li><li><a href="${homeHref("#faq")}">FAQ</a></li></ul></div>
           <div><h4>Visit the factory</h4><ul>
             <li>${esc(CFG.address)}</li><li>${esc(CFG.hours)}</li>

@@ -53,25 +53,6 @@
   $("#featured").innerHTML = window.SM_PRODUCTS.filter((p) => p.featured).slice(0, 4).map((p) => S.productCard(p)).join("");
   $$("#featured .product-card").forEach((c, i) => { c.classList.add("reveal"); c.style.transitionDelay = `${i * 70}ms`; });
 
-  /* ---------- Why us bento ---------- */
-  $("#bento").innerHTML = `
-    <div class="tile feature reveal"><span class="t-icon">${ICON.shield}</span><h3>Gauge-true, or we replace it</h3>
-      <p>Every order lists the gauge and coating thickness. Measure it with a micrometer when it arrives. If any sheet is thinner than invoiced, we replace the whole order free of charge.</p>
-      <div class="big">100%<span style="font-size:1rem;font-family:var(--font-body);font-weight:700;margin-left:10px;opacity:.85">gauge-verified</span></div></div>
-    <div class="tile wide reveal"><span class="t-icon">${ICON.sparkle}</span><h3>Quality you can measure</h3>
-      <p>We use pre-painted, Aluzinc-coated steel with UV-stable paint. The colour stays rich season after season.</p>
-      <div class="gauge-bars">${[[26, 0.47], [28, 0.40], [30, 0.30], [32, 0.25]].map(([g, t]) => `<div><span>G${g}</span><i style="width:${(t / 0.47) * 100}%"></i><span>${t.toFixed(2)} mm</span></div>`).join("")}</div></div>
-    <div class="tile reveal"><span class="t-icon">${ICON.truck}</span><h3>Fast, careful delivery</h3>
-      <ul><li>Same day around Ruiru & Thika Road</li><li>1–2 days across Nairobi Metro</li><li>Countrywide to all 47 counties</li><li>Sheets bundled and protected for transport</li></ul></div>
-    <div class="tile reveal"><span class="t-icon">${ICON.tag}</span><h3>Factory-direct prices</h3>
-      <ul><li>No middlemen, so you pay factory rates</li><li>All prices published online</li><li>Bulk & contractor discounts</li><li>The price we quote is the price you pay</li></ul></div>
-    <div class="tile reveal"><span class="t-icon">${ICON.refresh}</span><h3>Simple returns</h3>
-      <ul><li>7-day returns on uncut stock items</li><li>Free replacement for any factory defect</li><li>Refunds within 3 working days</li></ul></div>
-    <div class="tile wide reveal"><span class="t-icon">${ICON.ruler}</span><h3>Zero-waste cutting lists</h3>
-      <p>Send us your plan and we'll prepare a free cutting list. Each sheet is roll-formed to its rafter length, so you never pay for steel you throw away.</p></div>
-    <div class="tile wide reveal"><span class="t-icon">${ICON.leaf}</span><h3>Warranty up to 30 years</h3>
-      <p>We give a written colour and perforation warranty of 10–15 years on painted sheets and 30 years on stone-coated tiles. It is registered to your order number.</p></div>`;
-
   /* ---------- Calculator ---------- */
   const roofSheets = window.SM_PRODUCTS.filter((p) => p.category === "Roofing Sheets");
   const st = { roof: "gable", pid: "box-profile", gauge: 28, finish: "Gloss", colour: "Maroon" };
