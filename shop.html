@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shop Roofing Sheets & Accessories | Shadow Mabati</title>
+  <meta name="description" content="Shop box profile, tile, corrugated and stone-coated roofing sheets, plus ridges, gutters and fixings. Compare prices by gauge and order on WhatsApp.">
+  <meta name="theme-color" content="#0f1d38">
+  <link rel="icon" href="assets/logo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="shop">
+<main>
+  <section class="shop-hero">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><span>/</span><span>Shop</span></nav>
+      <div class="row">
+        <div style="display:grid;gap:12px">
+          <h1 style="font-size:clamp(2.2rem,4.6vw,3.6rem)">The Shadow Mabati shop</h1>
+          <p class="lead">Configure your gauge, finish, colour and exact length. Compare prices side by side and place your order on WhatsApp.</p>
+        </div>
+        <div class="input-unit" style="min-width:min(340px,100%)">
+          <input class="input" id="search" type="search" placeholder="Search products…" aria-label="Search products" style="background:var(--surface)">
+        </div>
+      </div>
+      <div class="cat-tabs" id="cat-tabs" role="toolbar" aria-label="Categories"></div>
+    </div>
+  </section>
+
+  <div class="wrap shop-layout">
+    <aside class="filters" id="filters" aria-label="Filters">
+      <div class="filters-head"><h3>Filters</h3><button class="icon-btn" id="filters-close" aria-label="Close filters"></button></div>
+      <div class="filter-group" id="fg-profile"><h4>Profile</h4><div class="checks" id="f-profile"></div></div>
+      <div class="filter-group" id="fg-gauge"><h4>Gauge</h4><div class="chip-row" id="f-gauge"></div></div>
+      <div class="filter-group"><h4>Colour</h4><div class="swatches" id="f-colour"></div></div>
+      <div class="filter-group"><h4>Price (KES per unit)</h4>
+        <div class="price-inputs"><input class="input" id="f-min" type="number" inputmode="numeric" placeholder="Min" aria-label="Minimum price"><span>–</span><input class="input" id="f-max" type="number" inputmode="numeric" placeholder="Max" aria-label="Maximum price"></div>
+      </div>
+      <button class="btn btn-ghost btn-sm" id="f-reset" type="button">Reset filters</button>
+      <div class="note-box"><span id="help-icon"></span><span>Not sure which sheet is right? <a href="index.html#calculator" style="color:var(--blue);font-weight:700">Try the roof calculator</a> or <a id="help-wa" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700">ask an advisor</a>.</span></div>
+    </aside>
+
+    <div>
+      <div class="toolbar">
+        <div class="count" id="count"></div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn btn-ghost btn-sm filter-toggle" id="filters-open" type="button">Filters</button>
+          <label class="sr-only" for="sort">Sort</label>
+          <select class="input select" id="sort">
+            <option value="featured">Sort: Featured</option>
+            <option value="price-asc">Price: low to high</option>
+            <option value="price-desc">Price: high to low</option>
+            <option value="value">Best value per m²</option>
+            <option value="name">Name A–Z</option>
+          </select>
+        </div>
+      </div>
+      <div class="active-filters" id="active-filters"></div>
+      <div class="product-grid" id="grid"></div>
+
+      <!-- price list -->
+      <section id="price-list" style="margin-top:72px">
+        <div class="section-head" style="margin-bottom:24px">
+          <span class="eyebrow">Transparent price list</span>
+          <h2 style="font-size:clamp(1.8rem,3vw,2.4rem)">Compare every sheet by gauge</h2>
+          <p class="lead" style="font-size:1rem">Sheets differ in cover width, so the price per metre doesn't tell the whole story. The <b>per m² of roof covered</b> figure is the fairest way to compare. Prices are in KES, VAT inclusive.</p>
+        </div>
+        <div class="panel" style="padding:0;overflow:hidden">
+          <div class="seg" id="pl-finish" style="margin:16px"></div>
+          <div class="table-scroll"><table class="compare-table" id="price-table"></table></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="compare-tray" id="compare-tray" aria-live="polite">
+    <div class="ct-items" id="ct-items"></div><span id="ct-text"></span>
+    <button class="btn btn-light btn-sm" id="ct-go" type="button">Compare</button>
+    <button class="btn btn-sm" id="ct-clear" type="button" style="--bg:transparent">Clear</button>
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/data.js"></script>
+<script src="js/art.js"></script>
+<script src="js/common.js"></script>
+<script src="js/shop.js"></script>
+</body>
+</html>
