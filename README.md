@@ -25,6 +25,7 @@ js/common.js    Header/footer, cart, quick view, checkout, PDF generation, Whats
 3. Check that every claim on the page is true for the business (warranty years, delivery times, return policy, "5,000+ roofs", the 4.9 rating, testimonials) and edit the text in `index.html`, `js/home.js` and `js/data.js`.
 
 ## Deploying (GitHub Pages)
+
 Push to `main` and GitHub Pages republishes in about a minute. After changing CSS or JS, bump the `?v=` version on the asset links so browsers fetch the new files instead of cached ones:
 
 ```sh
