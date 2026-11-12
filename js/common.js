@@ -109,10 +109,10 @@
     const nav = [["Products", "#products"], ["Calculator", "#calculator"], ["Why us", "#why"], ["About", "#about"], ["FAQ", "#faq"], ["Contact", "#contact"]];
     const logo = `<img class="logo" src="assets/logo.png" alt="Shadow Mabati" width="900" height="460">`;
     document.body.insertAdjacentHTML("afterbegin", `
-      <div class="topbar"><div class="wrap">
+      ${CFG.showTopbar ? `<div class="topbar"><div class="wrap">
         <span><b>Factory-direct prices</b> · Cut to your exact length · Same-day delivery around Ruiru</span>
         <span class="tb-right"><a href="tel:${CFG.phoneDisplay.replace(/\s/g, "")}">${CFG.phoneDisplay}</a><span>${CFG.hours}</span></span>
-      </div></div>
+      </div></div>` : ""}
       <header class="site-header"><div class="wrap">
         <a href="index.html" class="brand" aria-label="Shadow Mabati home">${logo}</a>
         <nav class="nav" aria-label="Main">${nav.map(([t, h]) => `<a href="${homeHref(h)}">${t}</a>`).join("")}</nav>

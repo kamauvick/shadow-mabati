@@ -102,7 +102,9 @@ p { margin: 0; }
 .topbar { background: var(--ink); color: #cfd6e6; font-size: .82rem; }
 .topbar .wrap { display: flex; justify-content: space-between; gap: 16px; padding-block: 8px; }
 .topbar b { color: #fff; font-weight: 700; }
-.topbar .tb-right { display: flex; gap: 20px; }
+.topbar .tb-right { display: flex; gap: 20px; flex: none; }
+.topbar .tb-right > * { white-space: nowrap; }
+@media (max-width: 960px) { .topbar .tb-right { display: none; } .topbar .wrap { justify-content: center; text-align: center; } }
 .topbar a:hover { color: #fff; }
 @media (max-width: 760px) { .topbar .tb-right { display: none; } .topbar .wrap { justify-content: center; text-align: center; } }
 

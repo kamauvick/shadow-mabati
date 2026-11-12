@@ -4,6 +4,8 @@
 ------------------------------------------------------------------- */
 window.SM_CONFIG = {
   businessName: "Shadow Mabati Factory",
+  // Thin announcement bar above the header (offers, phone, hours). Set to true to show it.
+  showTopbar: false,
   // International format, digits only (no +, spaces or leading 0). REPLACE with the real WhatsApp line.
   whatsappNumber: "254712115461",
   phoneDisplay: "0712 115 461",
