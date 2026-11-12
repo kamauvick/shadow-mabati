@@ -106,7 +106,13 @@
 
   /* ---------- chrome ---------- */
   function renderChrome() {
-    const nav = [["Products", "#products"], ["Visualiser", "#visualiser"], ["Calculator", "#calculator"], ["Why us", "#why"], ["About", "#about"], ["FAQ", "#faq"], ["Contact", "#contact"]];
+    // [label, target]: targets starting with "#" are sections on the home page
+    const nav = [["Shop", "shop.html"], ["Virtual visualiser", "#visualiser"], ["Cost calculator", "#calculator"], ["Why us", "#why"], ["About", "#about"], ["FAQ", "#faq"], ["Contact", "#contact"]];
+    const navLink = ([t, h]) => {
+      const href = h.startsWith("#") ? homeHref(h) : h;
+      const active = h === "shop.html" && document.body.dataset.page === "shop";
+      return `<a href="${href}"${active ? ' class="active" aria-current="page"' : ""}>${t}</a>`;
+    };
     const logo = `<img class="logo" src="assets/logo.png" alt="Shadow Mabati" width="900" height="460">`;
     document.body.insertAdjacentHTML("afterbegin", `
       ${CFG.showTopbar ? `<div class="topbar"><div class="wrap">
@@ -115,14 +121,14 @@
       </div></div>` : ""}
       <header class="site-header"><div class="wrap">
         <a href="index.html" class="brand" aria-label="Shadow Mabati home">${logo}</a>
-        <nav class="nav" aria-label="Main">${nav.map(([t, h]) => `<a href="${homeHref(h)}">${t}</a>`).join("")}</nav>
+        <nav class="nav" aria-label="Main">${nav.map(navLink).join("")}</nav>
         <div class="header-actions">
           <a href="shop.html" class="btn btn-red btn-sm btn-shop">Shop now</a>
           <button class="icon-btn" data-open-cart aria-label="Open cart">${ICON.cart}<span class="cart-count">0</span></button>
           <button class="icon-btn menu-btn" aria-label="Menu" aria-expanded="false">${ICON.menu}</button>
         </div>
       </div></header>
-      <nav class="mobile-nav" aria-label="Mobile">${nav.map(([t, h]) => `<a href="${homeHref(h)}">${t}</a>`).join("")}<a href="shop.html" class="btn btn-red">Shop now ${ICON.arrow}</a></nav>`);
+      <nav class="mobile-nav" aria-label="Mobile">${nav.map(navLink).join("")}<a href="shop.html" class="btn btn-red">Shop now ${ICON.arrow}</a></nav>`);
 
     document.body.insertAdjacentHTML("beforeend", `
       <footer class="site-footer"><div class="wrap">

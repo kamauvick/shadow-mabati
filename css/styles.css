@@ -141,7 +141,7 @@ p { margin: 0; }
 .cart-count.bump { animation: bump .4s ease; }
 @keyframes bump { 50% { transform: scale(1.35); } }
 .menu-btn { display: none; }
-@media (max-width: 1020px) {
+@media (max-width: 1080px) {
   .nav { display: none; }
   .menu-btn { display: grid; }
   .header-actions { margin-left: auto; }
