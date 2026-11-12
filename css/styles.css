@@ -191,7 +191,8 @@ p { margin: 0; }
 @media (max-width: 420px) { .hero-stats strong { font-size: 1.5rem; } .hero-stats div { padding-inline: 16px 0; } .hero-stats span { white-space: normal; } }
 
 /* ---------- Roof visualiser section ---------- */
-.vis-section { padding-top: clamp(80px, 9vw, 128px); } /* follows the hero stats directly */
+.hero + .section { padding-top: clamp(80px, 9vw, 128px); } /* whichever section follows the hero stats */
+#products + .vis-section { padding-top: 0; } /* same background, so don't double the gap */
 .vis-layout {
   display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(300px, 1fr); background: var(--surface);
   border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden;
