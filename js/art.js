@@ -199,29 +199,70 @@
     </svg>`;
   }
 
-  /* ---------- hero: one long box-profile sheet lying on a slant ----------
-     Drawn flat in local coordinates (length L × width H, ribs along the length),
-     then mapped onto a slanted parallelogram with an affine matrix. */
-  function heroSheetArt(hex) {
-    const c = hex, L = 1000, H = 360;
-    const p = patternDefs("box", c, 1.15);
-    const defs = p.defs.replace("<pattern ", `<pattern patternTransform="rotate(90)" `); // ribs run along the sheet
-    const sheen = nextId("sh");
-    // long edge u = (780, -450), short edge v = (230, 330), origin A = (40, 470)
-    const m = `matrix(${780 / L} ${-450 / L} ${230 / H} ${330 / H} 40 470)`;
-    return `<svg viewBox="0 0 1100 900" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMin meet" aria-hidden="true">
-      <defs>${defs}
-        <linearGradient id="${sheen}" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stop-color="#000" stop-opacity=".18"/><stop offset=".35" stop-color="#fff" stop-opacity=".22"/>
-          <stop offset=".55" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".12"/>
-        </linearGradient>
-      </defs>
-      <g transform="${m}">
-        <rect width="${L}" height="${H}" fill="url(#${p.id})"/>
-        <rect width="${L}" height="${H}" fill="url(#${sheen})"/>
-        <rect y="${H}" width="${L}" height="9" fill="${shade(c, -0.55)}"/>
-      </g>
-    </svg>`;
+  /* ---------- hero: isometric stack of sheets on timber bearers ----------
+     World coords: u = along the sheet length, v = across its width, z = up.
+     Isometric projection: X = (u − v)·cos30°, Y = (u + v)·sin30° − z. */
+  function heroStackArt(sheets) {
+    const C = Math.cos(Math.PI / 6), S = 0.5;
+    const L = 560, W = 230, H = 13, STEP = 25; // sheet length, width, rib height, layer spacing
+    const iso = (u, v, z) => [(u - v) * C, (u + v) * S - z];
+    const pts = (arr) => arr.map((p) => iso(...p).map((n) => n.toFixed(1)).join(",")).join(" ");
+    const all = []; // collect projected points for the viewBox
+    const track = (arr) => { arr.forEach((p) => all.push(iso(...p))); return arr; };
+
+    // cut-end profile height at position v across the sheet
+    const prof = (type, v) => {
+      if (type === "corrugated") { const P = 30; return H * (0.5 - 0.5 * Math.cos((2 * Math.PI * (v % P)) / P)); }
+      const P = 69, p = v % P; // box profile, matches patternDefs("box", …, 1.15)
+      if (p < 39) return 2; if (p < 43.7) return 2 + (H - 2) * ((p - 39) / 4.7);
+      if (p < 55.2) return H; if (p < 59.8) return H - (H - 2) * ((p - 55.2) / 4.6); return 2;
+    };
+
+    let defs = "", body = "";
+    // timber bearers under the bottom sheet
+    [70, L / 2 - 20, L - 110].forEach((u0) => {
+      const B = 34, T = 26, v0 = -14, v1 = W + 14;
+      body += `<polygon points="${pts(track([[u0, v1, -T], [u0 + B, v1, -T], [u0 + B, v1, 0], [u0, v1, 0]]))}" fill="#b0855a"/>`;
+      body += `<polygon points="${pts(track([[u0 + B, v0, -T], [u0 + B, v1, -T], [u0 + B, v1, 0], [u0 + B, v0, 0]]))}" fill="#8f6842"/>`;
+    });
+
+    sheets.forEach((sh, i) => {
+      const { hex: c, type, du = 0, dv = 0 } = sh;
+      const z0 = i * STEP, zt = z0 + H, u0 = du, u1 = du + L, v0 = dv, v1 = dv + W;
+      const p = patternDefs(type === "corrugated" ? "corrugated" : "box", c, type === "corrugated" ? 1.15 : 1.15);
+      defs += p.defs.replace("<pattern ", `<pattern patternTransform="rotate(90)" `); // ribs run along the length
+      // cut end (u = u1): silhouette of the profile
+      const n = 46, top = [];
+      for (let k = 0; k <= n; k++) { const v = v0 + (W * k) / n; top.push([u1, v, z0 + prof(type, v - v0)]); }
+      const endPoly = [...top, [u1, v1, z0], [u1, v0, z0]];
+      track(endPoly);
+      // long side (v = v1)
+      const side = track([[u0, v1, z0], [u1, v1, z0], [u1, v1, zt], [u0, v1, zt]]);
+      // top face as an affine-mapped rectangle so the pattern follows the sheet
+      const [ox, oy] = iso(u0, v0, zt);
+      track([[u0, v0, zt], [u1, v0, zt], [u1, v1, zt], [u0, v1, zt]]);
+      const m = `matrix(${C} ${S} ${-C} ${S} ${ox.toFixed(1)} ${oy.toFixed(1)})`;
+      body += `<g class="stack-sheet" style="--i:${sheets.length - 1 - i}">
+        <polygon points="${pts(endPoly)}" fill="${shade(c, -0.2)}"/>
+        <polyline points="${pts(top)}" fill="none" stroke="${shade(c, -0.5)}" stroke-width="2.2" stroke-linejoin="round"/>
+        <polygon points="${pts(side)}" fill="${shade(c, -0.38)}"/>
+        <g transform="${m}"><rect width="${L}" height="${W}" fill="url(#${p.id})"/><rect width="${L}" height="${W}" fill="#fff" opacity=".06"/></g>
+      </g>`;
+    });
+
+    // dimension line on the floor, in front of the stack's long side
+    const t = sheets[sheets.length - 1], zt = -26;
+    const off = W + 74, a = iso(t.du || 0, off, zt), b = iso((t.du || 0) + L, off, zt);
+    track([[t.du || 0, off, zt], [(t.du || 0) + L, off, zt]]);
+    const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2, ang = (Math.atan2(b[1] - a[1], b[0] - a[0]) * 180) / Math.PI;
+    const tick = (p) => `<line x1="${p[0] - 5}" y1="${p[1] + 9}" x2="${p[0] + 5}" y2="${p[1] - 9}" stroke="#8b93a3" stroke-width="1.5"/>`;
+    const dim = `<g class="stack-dim"><line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#8b93a3" stroke-width="1.2" stroke-dasharray="4 5"/>${tick(a)}${tick(b)}
+      <text x="${mx}" y="${my}" transform="rotate(${ang.toFixed(2)} ${mx} ${my}) translate(0 26)" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="600" fill="#5d6679" letter-spacing=".04em">CUT TO LENGTH · 1–10 m</text></g>`;
+
+    const xs = all.map((p) => p[0]), ys = all.map((p) => p[1]), pad = 30;
+    const x0 = Math.min(...xs) - pad, y0 = Math.min(...ys) - pad, w = Math.max(...xs) - x0 + pad, h = Math.max(...ys) - y0 + pad + 30;
+    return `<svg viewBox="${x0.toFixed(0)} ${y0.toFixed(0)} ${w.toFixed(0)} ${h.toFixed(0)}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A stack of Shadow Mabati roofing sheets in factory colours">
+      <defs>${defs}</defs>${body}${dim}</svg>`;
   }
 
   /* ---------- about: stacked sheets ---------- */
@@ -251,5 +292,5 @@
     leanto: `<svg viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M6 12 58 22"/><path d="M12 13v21h40V21"/></svg>`,
   };
 
-  window.SMArt = { shade, sheetArt, houseArt, heroSheetArt, factoryArt, roofIcons };
+  window.SMArt = { shade, sheetArt, houseArt, heroStackArt, factoryArt, roofIcons };
 })();

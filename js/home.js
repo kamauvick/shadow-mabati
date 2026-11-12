@@ -2,9 +2,16 @@
   const S = window.SM, A = window.SMArt, CFG = window.SM_CONFIG;
   const { $, $$, esc, fmt, ICON } = S;
 
-  /* ---------- Hero: decorative slanted sheet ---------- */
-  const heroSheet = $("#hero-sheet");
-  if (heroSheet) heroSheet.innerHTML = A.heroSheetArt(S.colourHex("Maroon"));
+  /* ---------- Hero: stack of sheets (bottom → top) ---------- */
+  const heroArt = $("#hero-art");
+  if (heroArt) heroArt.innerHTML = A.heroStackArt([
+    { hex: S.colourHex("Aluzinc Silver"), type: "corrugated", du: 6, dv: 4 },
+    { hex: S.colourHex("Forest Green"), type: "box", du: -14, dv: -3 },
+    { hex: S.colourHex("Charcoal"), type: "corrugated", du: 18, dv: 5 },
+    { hex: S.colourHex("Royal Blue"), type: "box", du: -6, dv: -2 },
+    { hex: S.colourHex("Tile Red"), type: "box", du: 22, dv: 3 },
+    { hex: S.colourHex("Maroon"), type: "box", du: 0, dv: 0 },
+  ]);
 
   /* ---------- Roof visualiser section ---------- */
   const visProfiles = ["box-profile", "versatile-tile", "euro-tile", "corrugated", "stone-coated"];

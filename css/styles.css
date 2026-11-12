@@ -157,41 +157,26 @@ p { margin: 0; }
 .mobile-nav .btn { margin-top: 12px; }
 
 /* ---------- Hero ---------- */
-.hero { position: relative; isolation: isolate; overflow-x: clip; padding: clamp(56px, 8vw, 120px) 0 clamp(64px, 8vw, 112px); }
-/* text column on the left; the slanted sheet fills the right */
-.hero-copy { max-width: 620px; position: relative; }
+.hero { position: relative; overflow-x: clip; padding: clamp(56px, 8vw, 112px) 0 clamp(64px, 8vw, 112px); }
+/* text on the left, the stack of sheets on the right — both with room to breathe */
+.hero-grid { display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); gap: clamp(32px, 5vw, 96px); align-items: center; }
+.hero-copy { max-width: 600px; position: relative; }
+.hero-art { position: relative; }
+.hero-art svg { width: 100%; height: auto; overflow: visible; }
+/* sheets settle onto the stack one by one */
+.stack-sheet { animation: settle .7s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc((5 - var(--i)) * 90ms); } /* bottom sheet first */
+.stack-dim { animation: fadein .6s ease .75s both; }
+@keyframes settle { from { opacity: 0; transform: translateY(-28px); } to { opacity: 1; transform: none; } }
+@keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 960px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-art { max-width: 560px; margin: 8px auto 0; width: 100%; }
+}
 .hero h1 { margin: 24px 0 28px; font-size: clamp(2.6rem, 5.4vw, 4.6rem); line-height: 1.04; }
 .hero-copy .lead { max-width: 52ch; }
 .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 40px; }
 @media (max-width: 480px) { .hero-cta { gap: 10px; } .hero-cta .btn { flex: 1 1 0; padding: 0 14px; font-size: .9rem; } }
-/* decorative sheet: starts under the (translucent) header, slides behind the trust strip,
-   and its left end fades into the page so it blends instead of sitting on top */
-.hero-sheet {
-  position: absolute; z-index: -1; pointer-events: none;
-  top: calc(-1 * var(--header-h) - 24px);
-  /* start just right of the text column, whatever the screen width */
-  left: max(calc(50% - 20px), calc(max(0px, (100% - var(--wrap)) / 2) + var(--gutter) + 650px));
-  width: min(74vw, 1280px); aspect-ratio: 1100 / 900;
-  -webkit-mask-image: linear-gradient(100deg, transparent 4%, #000 34%);
-          mask-image: linear-gradient(100deg, transparent 4%, #000 34%);
-}
-.hero-sheet svg { width: 100%; height: 100%; }
-.trust { position: relative; z-index: 1; }
-/* tablets & phones: the sheet becomes its own slanted band between the buttons and the stats */
-@media (max-width: 1100px) {
-  .hero-sheet {
-    position: relative; z-index: 0; top: auto; left: auto; width: auto; aspect-ratio: auto;
-    height: clamp(190px, 44vw, 380px); margin: 40px calc(-1 * var(--gutter)) 0; overflow: hidden;
-    /* fade in from the left and soften the top/bottom so the band has no hard edges */
-    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 45%), linear-gradient(180deg, transparent 0%, #000 22%, #000 85%, transparent 100%);
-    -webkit-mask-composite: source-in;
-            mask-image: linear-gradient(90deg, transparent 0%, #000 45%), linear-gradient(180deg, transparent 0%, #000 22%, #000 85%, transparent 100%);
-            mask-composite: intersect;
-  }
-  .hero-stats { width: auto; }
-  .hero-sheet svg { position: absolute; width: 120%; height: auto; right: -14%; top: -16%; }
-}
-.hero-stats { display: grid; grid-template-columns: repeat(4, auto); justify-content: start; width: fit-content; max-width: 100%; margin-top: clamp(56px, 7vw, 88px); border-top: 1px solid var(--line); position: relative; }
+.hero-stats { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: clamp(56px, 7vw, 88px); border-top: 1px solid var(--line); position: relative; }
 .hero-stats span { white-space: nowrap; }
 .hero-stats div { display: grid; padding: 28px 32px 0; }
 .hero-stats div:first-child { padding-left: 0; }
