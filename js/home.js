@@ -133,26 +133,30 @@
     const base = 250, x0 = 35, x1 = 285, wallTop = 110, wallBot = 145;
     const span = x1 - x0;
     const rise = Math.min(80, Math.tan((e.pitchDeg * Math.PI) / 180) * (e.roof === "leanto" ? span : span / 2) * 0.55);
+    const ink = "#5d6679", trim = A.shade(c, -0.35);
     let roof, labels;
     if (e.roof === "gable") {
       roof = `<polygon points="${x0 - 14},${wallTop + 4} ${(x0 + x1) / 2},${wallTop - rise} ${x1 + 14},${wallTop + 4}" fill="${c}"/>`;
-      labels = `<text x="${(x0 + x1) / 2 + 40}" y="${wallTop - rise / 2}" fill="#c9d3e6" font-size="11">${e.sheetLen} m sheets</text>`;
+      labels = `<text x="${(x0 + x1) / 2}" y="${wallTop - rise - 8}" fill="${ink}" font-size="11" font-weight="600" text-anchor="middle">${e.sheetLen} m sheets</text>`;
     } else if (e.roof === "hip") {
       roof = `<polygon points="${x0 - 14},${wallTop + 4} ${x0 + 70},${wallTop - rise} ${x1 - 70},${wallTop - rise} ${x1 + 14},${wallTop + 4}" fill="${c}"/>`;
-      labels = `<text x="${(x0 + x1) / 2}" y="${wallTop - rise - 8}" fill="#c9d3e6" font-size="11" text-anchor="middle">hip & ridge caps</text>`;
+      labels = `<text x="${(x0 + x1) / 2}" y="${wallTop - rise - 8}" fill="${ink}" font-size="11" font-weight="600" text-anchor="middle">hip &amp; ridge caps</text>`;
     } else {
       roof = `<polygon points="${x0 - 14},${wallTop - rise} ${x1 + 14},${wallTop + 4} ${x1 + 14},${wallTop + 10} ${x0 - 14},${wallTop - rise + 6}" fill="${c}"/>`;
-      labels = `<text x="${(x0 + x1) / 2}" y="${wallTop - rise / 2 - 12}" fill="#c9d3e6" font-size="11" text-anchor="middle">${e.sheetLen} m sheets</text>`;
+      labels = `<text x="${(x0 + x1) / 2}" y="${wallTop - rise - 2}" fill="${ink}" font-size="11" font-weight="600" text-anchor="middle">${e.sheetLen} m sheets</text>`;
     }
-    return `<svg viewBox="0 0 320 170" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif" role="img" aria-label="Roof diagram">
-      <rect x="${x0}" y="${wallTop}" width="${span}" height="${wallBot - wallTop}" fill="#2a3b60"/>
-      <rect x="${x0 + 30}" y="${wallTop + 10}" width="22" height="18" rx="2" fill="#41598a"/><rect x="${x1 - 52}" y="${wallTop + 10}" width="22" height="18" rx="2" fill="#41598a"/>
+    const vy = Math.max(0, Math.floor(wallTop - rise - 26)); // crop empty sky above the roof
+    return `<svg viewBox="0 ${vy} 320 ${170 - vy}" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif" role="img" aria-label="Roof diagram">
+      <line x1="10" y1="${wallBot}" x2="310" y2="${wallBot}" stroke="#d6d0c4" stroke-width="1.5"/>
+      <rect x="${x0}" y="${wallTop}" width="${span}" height="${wallBot - wallTop}" fill="#f4efe6" stroke="#d6d0c4"/>
+      <rect x="${x0 + 30}" y="${wallTop + 10}" width="22" height="18" rx="2" fill="#bccbe8"/><rect x="${x1 - 52}" y="${wallTop + 10}" width="22" height="18" rx="2" fill="#bccbe8"/>
+      <rect x="${(x0 + x1) / 2 - 9}" y="${wallTop + 12}" width="18" height="${wallBot - wallTop - 12}" rx="1.5" fill="#a6826a"/>
       ${roof}
-      <path d="M${x0} ${base - 90}h${span}" stroke="none"/>
-      <line x1="${x0}" y1="158" x2="${x1}" y2="158" stroke="#7d8db0" stroke-width="1"/><line x1="${x0}" y1="153" x2="${x0}" y2="163" stroke="#7d8db0"/><line x1="${x1}" y1="153" x2="${x1}" y2="163" stroke="#7d8db0"/>
+      <rect x="${x0 - 14}" y="${wallTop + 2}" width="${span + 28}" height="4" fill="${trim}"/>
+      <line x1="${x0}" y1="158" x2="${x1}" y2="158" stroke="#8b93a3" stroke-width="1"/><line x1="${x0}" y1="153" x2="${x0}" y2="163" stroke="#8b93a3"/><line x1="${x1}" y1="153" x2="${x1}" y2="163" stroke="#8b93a3"/>
       <rect x="${(x0 + x1) / 2 - 34}" y="151" width="68" height="14" rx="7" fill="#0f1d38"/>
       <text x="${(x0 + x1) / 2}" y="161.5" fill="#fff" font-size="10.5" font-weight="700" text-anchor="middle">${e.W} m wide</text>
-      <text x="${x1 + 4}" y="${wallTop + 26}" fill="#ff8a91" font-size="11" font-weight="700">${e.pitchDeg}°</text>
+      <text x="${x1 + 4}" y="${wallTop + 26}" fill="#d42a35" font-size="11" font-weight="700">${e.pitchDeg}°</text>
       ${labels}
     </svg>`;
   }
@@ -161,7 +165,7 @@
     const e = estimate, p = e.p;
     $("#calc-diagram").innerHTML = diagram(e);
     const k3 = S.isSheet(p) ? (e.sheets ? ["Sheets", `${e.sheets} × ${e.sheetLen}m`] : ["Sheet metres", `${e.metres} m`]) : ["Tiles", e.items[0].qty];
-    $("#calc-kpis").innerHTML = [["Roof area", `${e.area.toFixed(0)} m²`], ["Total cost / m²", fmt(e.total / e.area).replace("KES ", "")], k3]
+    $("#calc-kpis").innerHTML = [["Roof area", `${e.area.toFixed(0)} m²`], ["KES per m²", fmt(e.total / e.area).replace("KES ", "")], k3]
       .map(([s, b]) => `<div class="kpi"><small>${s}</small><b>${b}</b></div>`).join("");
     $("#calc-lines").innerHTML = e.items.map((it) => {
       const ip = S.byId(it.id);
