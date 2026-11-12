@@ -32,6 +32,7 @@
     if (f.gauges.size && !(p.gauges || []).some((g) => f.gauges.has(g))) return false;
     if (f.colours.size && !(p.colours || []).some((c) => f.colours.has(c))) return false;
     const fp = S.fromPrice(p);
+    if ((f.min !== null || f.max !== null) && fp === null) return false; // price on request
     if (f.min !== null && fp < f.min) return false;
     if (f.max !== null && fp > f.max) return false;
     return true;
@@ -39,8 +40,9 @@
   const valueScore = (p) => S.perSqm(p, p.gauges && p.gauges[0], p.finishes && p.finishes[0]) ?? Infinity;
   function sorted(list) {
     const l = [...list];
-    if (f.sort === "price-asc") l.sort((a, b) => S.fromPrice(a) - S.fromPrice(b));
-    if (f.sort === "price-desc") l.sort((a, b) => S.fromPrice(b) - S.fromPrice(a));
+    const pr = (p, empty) => S.fromPrice(p) ?? empty; // price-on-request items sort last
+    if (f.sort === "price-asc") l.sort((a, b) => pr(a, Infinity) - pr(b, Infinity));
+    if (f.sort === "price-desc") l.sort((a, b) => pr(b, -Infinity) - pr(a, -Infinity));
     if (f.sort === "name") l.sort((a, b) => a.name.localeCompare(b.name));
     if (f.sort === "value") l.sort((a, b) => valueScore(a) - valueScore(b));
     if (f.sort === "featured") l.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));

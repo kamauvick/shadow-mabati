@@ -270,7 +270,10 @@ p { margin: 0; }
 .product-card:hover { border-color: var(--muted-2); }
 .pc-media { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--paper-2); cursor: pointer; }
 .pc-media svg { width: 100%; height: 100%; transition: transform .6s ease; }
-.product-card:hover .pc-media svg { transform: scale(1.03); }
+.product-card:hover .pc-media svg, .product-card:hover .pc-media img { transform: scale(1.03); }
+/* real product photos fill their frames the same way the drawings do */
+.pc-media img, .cart-thumb img, .vp-thumb img, .ct-items i img, .ct-head .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pc-media img { transition: transform .6s ease; }
 .pc-badge {
   position: absolute; top: 12px; left: 12px; background: var(--surface); color: var(--ink); font-size: .72rem; font-weight: 800;
   padding: 5px 10px; border-radius: 999px; letter-spacing: .02em;
@@ -574,7 +577,9 @@ a.c-item:hover { border-color: var(--ink); }
 .pd { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); }
 .pd-media { background: var(--paper-2); position: relative; min-height: 100%; }
 /* art keeps its proportions (preserveAspectRatio=meet); its oversized background fills the rest */
-.pd-media svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.pd-media svg, .pd-media img { position: absolute; inset: 0; width: 100%; height: 100%; }
+.pd-media img { object-fit: cover; }
+@media (min-width: 901px) { .pd-media { min-height: 420px; } }
 .pd-body { padding: 40px; display: grid; gap: 22px; align-content: start; }
 .pd-body h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); padding-right: 48px; }
 .pd-actions { display: grid; gap: 12px; }

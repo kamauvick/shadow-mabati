@@ -52,12 +52,21 @@
     return p.base + (CFG.gaugeUplift[gauge] || 0) + (CFG.finishUplift[finish] || 0);
   }
   function fromPrice(p) {
+    if (p.quote) return null; // price on request
     if (!isSheet(p)) return p.price;
     return Math.min(...p.gauges.map((g) => unitPrice(p, g, p.finishes[0])));
   }
-  const unitLabel = (p) => ({ m: "/ metre", tile: "/ tile", pc: "/ piece", set: "/ set", kg: "/ kg", box: "/ box", pack: "/ pack", tube: "/ tube" }[p.unit] || "");
-  const perSqm = (p, gauge, finish) => (isSheet(p) ? unitPrice(p, gauge, finish) / p.cover : p.perSqm ? p.price * p.perSqm : null);
-  function artFor(p, colourName) {
+  const unitLabel = (p) => ({ m: "/ metre", tile: "/ tile", pc: "/ piece", set: "/ set", kg: "/ kg", box: "/ box", pack: "/ pack", tube: "/ tube", bundle: "/ bundle", roll: "/ roll" }[p.unit] || "");
+  const perSqm = (p, gauge, finish) => (isSheet(p) ? unitPrice(p, gauge, finish) / p.cover : p.perSqm && p.price ? p.price * p.perSqm : null);
+  // Real photo for this product/colour if we have one, otherwise the drawn illustration in that colour
+  function photoFor(p, colourName) {
+    if (!p.photos) return null;
+    const c = colourName || (p.colours ? p.colours[0] : "");
+    return p.photos[c] || null;
+  }
+  function artFor(p, colourName, { photo = true } = {}) {
+    const src = photo && photoFor(p, colourName);
+    if (src) return `<img src="assets/products/${src}" alt="${esc(p.name)}${colourName ? ` in ${esc(colourName)}` : ""}" loading="lazy" decoding="async">`;
     const hex = colourName ? colourHex(colourName) : p.colours ? colourHex(p.colours[0]) : "#9aa3ad";
     return A.sheetArt(p.profile, hex);
   }
@@ -90,6 +99,7 @@
   const listeners = [];
   function saveCart() { store.set("sm_cart", cart); updateCount(); listeners.forEach((f) => f(cart)); if (drawerOpen) renderDrawer(); }
   function addToCart(item, { silent = false } = {}) {
+    if (!byId(item.id) || byId(item.id).quote) return; // price-on-request items are enquired about, not carted
     const key = [item.id, item.colour, item.gauge, item.finish, item.length, item.note].join("|");
     const ex = cart.find((i) => i.key === key);
     if (ex) ex.qty += item.qty; else cart.push({ ...item, key });
@@ -138,7 +148,8 @@
             <li><a href="shop.html?cat=Roofing%20Sheets">Roofing sheets</a></li>
             <li><a href="shop.html?cat=Ridges%20%26%20Flashing">Ridges & flashing</a></li>
             <li><a href="shop.html?cat=Gutters%20%26%20Downpipes">Gutters & downpipes</a></li>
-            <li><a href="shop.html?cat=Fixings">Nails & fixings</a></li></ul></div>
+            <li><a href="shop.html?cat=Fixings">Nails & fixings</a></li>
+            <li><a href="shop.html?cat=Shingles%20%26%20Insulation">Shingles & insulation</a></li></ul></div>
           <div><h4>Company</h4><ul>
             <li><a href="${homeHref("#about")}">About us</a></li><li><a href="${homeHref("#visualiser")}">Roof visualiser</a></li>
             <li><a href="${homeHref("#calculator")}">Roof calculator</a></li><li><a href="${homeHref("#faq")}">FAQ</a></li></ul></div>
@@ -209,6 +220,7 @@
   function openProduct(id, preset = {}) {
     const p = byId(id);
     if (!p) return;
+    if (p.quote) return openEnquiry(p);
     const st = {
       colour: preset.colour || (p.colours ? p.colours[0] : null),
       gauge: preset.gauge || (p.gauges && p.gauges.length ? (p.gauges.includes(28) ? 28 : p.gauges[0]) : null),
@@ -679,6 +691,22 @@
   }
 
   /* ---------- product card ---------- */
+  /* Price-on-request product: details + WhatsApp enquiry instead of configure/add to cart */
+  function openEnquiry(p) {
+    const msg = `Hello Shadow Mabati, I'd like a price for ${p.name}. Please share the options and price${p.unit ? ` per ${p.unit}` : ""}.`;
+    openModal(`<div class="pd">
+      <div class="pd-media">${artFor(p)}</div>
+      <div class="pd-body">
+        <div><div class="pc-cat">${esc(p.category)}${p.use ? ` · ${esc(p.use)}` : ""}</div><h2>${esc(p.name)}</h2></div>
+        <p class="lead" style="font-size:1rem">${esc(p.short)}</p>
+        <div class="pd-price"><div><small>Price</small><b style="font-size:1.5rem">On request</b></div></div>
+        <p style="color:var(--muted);font-size:.92rem">Prices depend on the colour, quantity and your site. Send us a message and we'll reply with a quote, usually within 30 minutes during working hours.</p>
+        <div class="pd-btns" style="grid-template-columns:1fr">
+          <a class="btn btn-wa" href="${waLink(msg)}" target="_blank" rel="noopener">${ICON.wa} Ask for a price on WhatsApp</a>
+        </div>
+      </div></div>`);
+  }
+
   function productCard(p, { compare = false } = {}) {
     const fp = fromPrice(p);
     const colours = p.colours || [];
@@ -698,8 +726,11 @@
           ${colours.length ? `<div class="dots">${colours.slice(0, 5).map((c) => `<i style="background:${colourHex(c)}" title="${esc(c)}"></i>`).join("")}${colours.length > 5 ? `<em>+${colours.length - 5}</em>` : ""}</div>` : ""}
         </div>
         <div class="pc-foot">
-          <div class="price"><small>${isSheet(p) ? "From" : "Price"}</small><b>${fmt(fp)} <span>${unitLabel(p)}</span></b></div>
-          <button class="btn btn-sm" data-quick="${p.id}">${isSheet(p) ? "Configure" : "Add"}</button>
+          ${p.quote
+            ? `<div class="price"><small>Price</small><b>On request</b></div>
+          <button class="btn btn-sm" data-quick="${p.id}">Ask price</button>`
+            : `<div class="price"><small>${isSheet(p) ? "From" : "Price"}</small><b>${fmt(fp)} <span>${unitLabel(p)}</span></b></div>
+          <button class="btn btn-sm" data-quick="${p.id}">${isSheet(p) ? "Configure" : "Add"}</button>`}
         </div>
       </div></article>`;
   }

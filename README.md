@@ -8,7 +8,8 @@ shop.html       Shop: categories, filters, search, sort, compare (up to 3), gaug
 css/styles.css  Design system (colour tokens at the top)
 js/config.js    WhatsApp number, phone, email, address, hours, delivery zones and fees, gauge/finish price uplifts
 js/data.js      Products, colours, testimonials, FAQ
-js/art.js       SVG illustrations of each profile (replace with photos later)
+js/art.js       SVG illustrations (fallback when a product/colour has no photo)
+assets/products Product photos (max 1100 px JPEGs), mapped per colour in js/data.js
 js/common.js    Header/footer, cart, quick view, checkout, PDF generation, WhatsApp hand-off
 ```
 

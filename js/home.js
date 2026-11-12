@@ -25,7 +25,7 @@
       const q = S.byId(id);
       const col = q.colours.includes(vis.colour) ? vis.colour : q.colours[0];
       return `<button type="button" class="vis-profile" data-pid="${id}" aria-pressed="${id === vis.pid}">
-        <span class="vp-thumb">${S.artFor(q, col)}</span>
+        <span class="vp-thumb">${S.artFor(q, col, { photo: false })}</span>
         <span class="vp-text"><b>${esc(q.name)}</b><small>from ${fmt(S.fromPrice(q))}${S.isSheet(q) ? "/m" : "/tile"}</small></span>
       </button>`;
     }).join("");

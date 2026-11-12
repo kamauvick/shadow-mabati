@@ -2,6 +2,9 @@
    Product catalogue. Prices are KES.
    - unit "m": base = G30 gloss price per running metre (gauge/finish uplifts from config)
    - other units: fixed price per unit
+   - quote: true → "Price on request" (no price, enquiry via WhatsApp instead of cart)
+   - photos: { colour: "file in assets/products/" }. The first listed colour should have a photo;
+     colours without one fall back to the drawn illustration in that colour.
 ------------------------------------------------------------------- */
 window.SM_COLOURS = [
   { name: "Maroon", hex: "#6E1F24" },
@@ -19,7 +22,8 @@ window.SM_PRODUCTS = [
   {
     id: "box-profile", name: "Box Profile", category: "Roofing Sheets", profile: "box",
     unit: "m", base: 520, cover: 0.9, gauges: [30, 28, 26], finishes: ["Gloss", "Matte"],
-    colours: ["Maroon", "Charcoal", "Tile Red", "Forest Green", "Royal Blue", "Coffee Brown"],
+    colours: ["Maroon", "Charcoal", "Royal Blue", "Coffee Brown", "Tile Red", "Forest Green"],
+    photos: { "Maroon": "box-profile-maroon.jpg", "Charcoal": "box-profile-charcoal.jpg", "Royal Blue": "box-profile-blue.jpg", "Coffee Brown": "box-profile-brown.jpg" },
     featured: true, badge: "Best seller", warranty: "15 yrs (G28)",
     short: "Sharp trapezoidal ribs. Clean, modern lines for homes, warehouses and estates.",
     use: "Residential · Commercial",
@@ -27,7 +31,8 @@ window.SM_PRODUCTS = [
   {
     id: "versatile-tile", name: "Versatile Tile", category: "Roofing Sheets", profile: "tile",
     unit: "m", base: 600, cover: 1.0, gauges: [30, 28], finishes: ["Gloss", "Matte"],
-    colours: ["Maroon", "Tile Red", "Brick Red", "Charcoal", "Coffee Brown", "Forest Green"],
+    colours: ["Tile Red", "Forest Green", "Charcoal", "Maroon", "Brick Red", "Coffee Brown"],
+    photos: { "Tile Red": "versatile-tile-red.jpg", "Forest Green": "versatile-tile-green.jpg", "Charcoal": "versatile-tile-charcoal.jpg" },
     featured: true, badge: "Premium look", warranty: "15 yrs (G28)",
     short: "Step-tile profile that reads like clay tiles from the road, at a fraction of the weight.",
     use: "Residential · Maisonettes",
@@ -36,6 +41,7 @@ window.SM_PRODUCTS = [
     id: "euro-tile", name: "Euro Tile", category: "Roofing Sheets", profile: "euro",
     unit: "m", base: 640, cover: 1.0, gauges: [30, 28], finishes: ["Gloss", "Matte"],
     colours: ["Charcoal", "Maroon", "Coffee Brown", "Tile Red"],
+    photos: { "Charcoal": "euro-tile-charcoal.jpg" },
     featured: true, badge: "New", warranty: "15 yrs (G28)",
     short: "Deep, rounded tile pattern with bold shadow lines. Our most architectural sheet.",
     use: "Villas · Modern homes",
@@ -43,14 +49,16 @@ window.SM_PRODUCTS = [
   {
     id: "classic-tile", name: "Classic Roman Tile", category: "Roofing Sheets", profile: "roman",
     unit: "m", base: 630, cover: 1.0, gauges: [30, 28], finishes: ["Gloss", "Matte"],
-    colours: ["Tile Red", "Brick Red", "Maroon", "Coffee Brown"],
+    colours: ["Coffee Brown", "Forest Green", "Charcoal", "Tile Red", "Brick Red", "Maroon"],
+    photos: { "Coffee Brown": "roman-tile-brown.jpg", "Forest Green": "roman-tile-green.jpg", "Charcoal": "roman-tile-charcoal.jpg" },
     short: "Traditional rolled-tile look with crisp step breaks and generous cover width.",
     use: "Residential", warranty: "15 yrs (G28)",
   },
   {
     id: "corrugated", name: "Corrugated", category: "Roofing Sheets", profile: "corrugated",
     unit: "m", base: 420, cover: 0.76, gauges: [32, 30, 28], finishes: ["Gloss"],
-    colours: ["Aluzinc Silver", "Maroon", "Forest Green", "Ocean Blue"],
+    colours: ["Aluzinc Silver", "Maroon", "Charcoal", "Forest Green", "Ocean Blue"],
+    photos: { "Aluzinc Silver": "corrugated-aluzinc.jpg", "Maroon": "corrugated-maroon.jpg", "Charcoal": "corrugated-charcoal.jpg" },
     featured: true, badge: "Best value", warranty: "10 yrs (G28)",
     short: "The dependable classic. Light, quick to install and kind on the budget.",
     use: "Farm · Rentals · Stores",
@@ -72,7 +80,8 @@ window.SM_PRODUCTS = [
   {
     id: "stone-coated", name: "Stone-Coated Tile", category: "Roofing Sheets", profile: "stone",
     unit: "tile", price: 780, perSqm: 2.1, gauges: [], finishes: ["Granule"],
-    colours: ["Charcoal", "Coffee Brown", "Tile Red", "Forest Green"],
+    colours: ["Charcoal", "Coffee Brown", "Forest Green", "Maroon", "Tile Red"],
+    photos: { "Charcoal": "stone-coated-charcoal.jpg", "Coffee Brown": "stone-coated-brown.jpg", "Forest Green": "stone-coated-green.jpg", "Maroon": "stone-coated-maroon.jpg" },
     featured: true, badge: "Luxury", warranty: "30 yrs",
     short: "Steel tiles with a stone-chip finish. Silent in rain, rich in texture, built for decades.",
     use: "Luxury homes",
@@ -93,13 +102,25 @@ window.SM_PRODUCTS = [
   { id: "gutter-fittings", name: "Gutter Fittings Set", category: "Gutters & Downpipes", profile: "gutter", unit: "set", price: 1200,
     colours: ["Charcoal", "Maroon", "Coffee Brown"], short: "End caps, joiner, outlet, 2 elbows and hangers." },
   { id: "nails", name: "Umbrella Roofing Nails", category: "Fixings", profile: "fixing", unit: "kg", price: 320,
-    short: "Galvanised nails with pre-fitted umbrella head. Approx. 1 kg per 10 m²." },
+    colours: ["Forest Green", "Charcoal"],
+    photos: { "Forest Green": "nails-green.jpg", "Charcoal": "nails-black.jpg" },
+    short: "Galvanised nails with a colour-matched umbrella head. Approx. 1 kg per 10 m²." },
   { id: "screws", name: "Self-Drilling Roof Screws (100)", category: "Fixings", profile: "fixing", unit: "box", price: 1800,
     short: "Colour-matched heads with EPDM washers for steel purlins." },
   { id: "washers", name: "Rubber Washers (100)", category: "Fixings", profile: "fixing", unit: "pack", price: 150,
     short: "Weatherproof seal under every fixing." },
   { id: "silicone", name: "Roof Sealant / Silicone", category: "Fixings", profile: "fixing", unit: "tube", price: 450,
     short: "UV-stable sealant for flashings and overlaps." },
+
+  // Price on request
+  { id: "asphalt-shingles", name: "Asphalt Roofing Shingles", category: "Shingles & Insulation", profile: "stone", unit: "bundle", quote: true,
+    photos: { "": "asphalt-shingles.jpg" },
+    short: "Fibreglass asphalt shingles for steep and decorative roofs. See the full colour range at our showroom.",
+    use: "Villas · Gazebos" },
+  { id: "roof-insulation", name: "Reflective Roof Insulation", category: "Shingles & Insulation", profile: "fixing", unit: "roll", quote: true,
+    photos: { "": "roof-insulation.jpg" },
+    short: "Foil-faced insulation rolls laid under the sheets. Keeps rooms cooler and quietens heavy rain.",
+    use: "Homes · Schools · Warehouses" },
 ];
 
 window.SM_TESTIMONIALS = [
