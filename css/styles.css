@@ -157,7 +157,7 @@ p { margin: 0; }
 .mobile-nav .btn { margin-top: 12px; }
 
 /* ---------- Hero ---------- */
-.hero { position: relative; overflow-x: clip; padding: clamp(56px, 8vw, 112px) 0 clamp(64px, 8vw, 112px); }
+.hero { position: relative; overflow-x: clip; padding: clamp(56px, 8vw, 112px) 0 clamp(8px, 2vw, 24px); }
 /* text on the left, the stack of sheets on the right — both with room to breathe */
 .hero-grid { display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); gap: clamp(32px, 5vw, 96px); align-items: center; }
 .hero-copy { max-width: 600px; position: relative; }
@@ -258,21 +258,6 @@ p { margin: 0; }
 .swatch[aria-pressed="true"]::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid var(--ink); }
 .swatch.sm { width: 22px; height: 22px; }
 
-/* ---------- Trust strip ---------- */
-.trust { border-block: 1px solid var(--line); background: var(--surface); }
-.trust .wrap { display: grid; grid-template-columns: repeat(4, 1fr); }
-.trust-item { display: flex; gap: 16px; align-items: center; padding: 32px 28px; }
-.trust-item + .trust-item { border-left: 1px solid var(--line); }
-.trust-item .ti-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--blue-soft); color: var(--blue); display: grid; place-items: center; flex: none; }
-.trust-item .ti-icon svg { width: 22px; height: 22px; }
-.trust-item b { display: block; font-size: .95rem; }
-.trust-item span { font-size: .84rem; color: var(--muted); line-height: 1.5; display: block; margin-top: 2px; }
-@media (max-width: 900px) {
-  .trust .wrap { grid-template-columns: 1fr 1fr; }
-  .trust-item:nth-child(3) { border-left: 0; }
-  .trust-item:nth-child(n+3) { border-top: 1px solid var(--line); }
-}
-@media (max-width: 520px) { .trust-item { padding: 24px 12px; flex-direction: column; align-items: flex-start; gap: 10px; } }
 
 /* ---------- Product cards ---------- */
 .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: clamp(20px, 2.4vw, 32px); }

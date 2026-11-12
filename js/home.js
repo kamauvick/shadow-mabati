@@ -49,14 +49,6 @@
   });
   renderVis();
 
-  /* ---------- Trust strip ---------- */
-  $("#trust").innerHTML = [
-    [ICON.ruler, "Cut to your length", "1–10 m sheets with zero offcut waste"],
-    [ICON.truck, "Same-day delivery", "Ruiru, Juja, Kiambu & Thika Road"],
-    [ICON.shield, "Gauge guarantee", "Thinner than invoiced? We replace it free"],
-    [ICON.tag, "Clear, fair prices", "Published online, VAT inclusive"],
-  ].map(([i, b, s]) => `<div class="trust-item"><span class="ti-icon">${i}</span><div><b>${b}</b><span>${s}</span></div></div>`).join("");
-
   /* ---------- Featured ---------- */
   $("#featured").innerHTML = window.SM_PRODUCTS.filter((p) => p.featured).slice(0, 4).map((p) => S.productCard(p)).join("");
   $$("#featured .product-card").forEach((c, i) => { c.classList.add("reveal"); c.style.transitionDelay = `${i * 70}ms`; });
