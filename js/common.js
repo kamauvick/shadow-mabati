@@ -222,10 +222,12 @@
           ${isSheet(p) ? `<div class="field"><label for="pd-len">Length per sheet</label><div class="input-unit"><input id="pd-len" class="input" type="number" min="1" max="10" step="0.1" value="${st.length}"><span>m</span></div></div>` : ""}
           <div class="field ${isSheet(p) ? "" : "full"}"><label for="pd-qty">${isSheet(p) ? "Number of sheets" : `Quantity (${p.unit})`}</label><input id="pd-qty" class="input" type="number" min="1" step="1" value="${st.qty}"></div>
         </div>
-        <div class="pd-price"><div><small data-unit-price></small><b data-line-total></b></div><div style="text-align:right"><small>Coverage</small><b style="font-size:1.1rem;font-family:var(--font-body)" data-cover></b></div></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <button class="btn btn-red" data-add>${ICON.cart} Add to cart</button>
-          <a class="btn btn-ghost" data-ask target="_blank" rel="noopener">${ICON.wa} Ask on WhatsApp</a>
+        <div class="pd-actions">
+          <div class="pd-price"><div><small data-unit-price></small><b data-line-total></b></div><div class="pd-cover"><small>Coverage</small><b data-cover></b></div></div>
+          <div class="pd-btns">
+            <button class="btn btn-red" data-add>${ICON.cart} Add to cart</button>
+            <a class="btn btn-ghost" data-ask target="_blank" rel="noopener" aria-label="Ask on WhatsApp">${ICON.wa}<span>Ask on WhatsApp</span></a>
+          </div>
         </div>
         <table class="spec-table"><tbody>
           ${isSheet(p) ? `<tr><td>Effective cover width</td><td>${p.cover} m</td></tr><tr><td>Lengths</td><td>Cut to size, 1 – 10 m</td></tr>` : ""}
@@ -237,8 +239,15 @@
 
     const media = $(".pd-media", card);
     const lenI = $("#pd-len", card), qtyI = $("#pd-qty", card);
+    // keep the price / add-to-cart bar last so it can pin to the bottom on small screens
+    const acts = $(".pd-actions", card); acts.parentElement.appendChild(acts);
+    let artColour = null;
     function update() {
-      media.innerHTML = artFor(p, st.colour);
+      if (artColour !== st.colour) {
+        artColour = st.colour;
+        media.innerHTML = artFor(p, st.colour);
+        const svgEl = $("svg", media); if (svgEl) svgEl.setAttribute("preserveAspectRatio", "xMidYMid meet");
+      }
       $$("[data-colour]", card).forEach((b) => b.setAttribute("aria-pressed", b.dataset.colour === st.colour));
       const cn = $("[data-colour-name]", card); if (cn) cn.textContent = st.colour;
       st.length = lenI ? Math.min(10, Math.max(1, parseFloat(lenI.value) || 1)) : null;

@@ -89,9 +89,9 @@
     const bg1 = shade(c, 0.88), bg2 = shade(c, 0.74);
     const bgId = nextId("bg");
     const shId = nextId("sh");
-    const base = `<defs><linearGradient id="${bgId}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${bg1}"/><stop offset="1" stop-color="${bg2}"/></linearGradient>
+    const base = `<defs><linearGradient id="${bgId}" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="400" y2="300"><stop offset="0" stop-color="${bg1}"/><stop offset="1" stop-color="${bg2}"/></linearGradient>
       <filter id="${shId}" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="14" stdDeviation="12" flood-color="#0f1d38" flood-opacity=".28"/></filter></defs>
-      <rect width="400" height="300" fill="url(#${bgId})"/>`;
+      <rect x="-400" y="-400" width="1200" height="1100" fill="url(#${bgId})"/>`;
 
     if (profile === "ridge") {
       return svg(`${base}<g filter="url(#${shId})">
