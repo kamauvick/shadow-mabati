@@ -107,7 +107,7 @@
   /* ---------- chrome ---------- */
   function renderChrome() {
     // [label, target]: targets starting with "#" are sections on the home page
-    const nav = [["Shop", "shop.html"], ["Virtual visualiser", "#visualiser"], ["Cost calculator", "#calculator"], ["About", "#about"], ["FAQ", "#faq"], ["Contact", "#contact"]];
+    const nav = [["Shop", "shop.html"], ["Virtual visualiser", "#visualiser"], ["Calculator", "#calculator"], ["About", "#about"], ["FAQ", "#faq"], ["Contact", "#contact"]];
     const navLink = ([t, h]) => {
       const href = h.startsWith("#") ? homeHref(h) : h;
       const active = h === "shop.html" && document.body.dataset.page === "shop";
