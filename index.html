@@ -23,32 +23,22 @@
 
   <!-- ============ HERO ============ -->
   <section class="hero">
-    <div class="wrap hero-grid">
-      <div>
+    <div class="wrap">
+      <div class="hero-copy">
         <span class="eyebrow">Roofing factory · Kamakis, Ruiru Bypass</span>
         <h1>Roofing that <span class="accent">outlasts</span> the rain.</h1>
         <p class="lead">Box profile, tile, corrugated and stone-coated mabati, roll-formed to your exact lengths in our factory and delivered to your site. You get honest gauges, clear prices and no wasted sheets.</p>
         <div class="hero-cta">
           <a href="#calculator" class="btn btn-red">Calculate my roof</a>
-          <a href="shop.html" class="btn btn-ghost">Shop products</a>
-        </div>
-        <div class="hero-stats">
-          <div><strong>9</strong><span>Factory colours</span></div>
-          <div><strong>1–10 m</strong><span>Cut to length</span></div>
-          <div><strong>24 hrs</strong><span>Typical local delivery</span></div>
+          <a href="#visualiser" class="btn btn-ghost">Preview colours</a>
         </div>
       </div>
-
-      <div class="visualiser reveal" aria-label="Roof colour visualiser">
-        <div class="vis-top" title="Click to configure this sheet">
-          <div class="vis-stage" id="vis-stage"></div>
-          <div class="vis-tag" id="vis-tag"><i></i><span></span></div>
-          <div class="vis-price" id="vis-price"><small>From</small><b></b></div>
-        </div>
-        <div class="vis-controls">
-          <div class="vis-row"><span class="vis-label">Profile</span><div class="seg" id="vis-profile"></div></div>
-          <div class="vis-row"><span class="vis-label">Colour</span><div class="swatches" id="vis-colours"></div></div>
-        </div>
+      <div class="hero-sheet" id="hero-sheet" aria-hidden="true"></div>
+      <div class="hero-stats">
+        <div><strong>9</strong><span>Factory colours</span></div>
+        <div><strong>1–10 m</strong><span>Sheets cut to your length</span></div>
+        <div><strong>24 hrs</strong><span>Typical local delivery</span></div>
+        <div><strong>15 yrs</strong><span>Warranty on G28 sheets</span></div>
       </div>
     </div>
   </section>
@@ -56,6 +46,41 @@
   <!-- ============ TRUST STRIP ============ -->
   <section class="trust" aria-label="Our promises">
     <div class="wrap" id="trust"></div>
+  </section>
+
+  <!-- ============ VISUALISER ============ -->
+  <section class="section vis-section" id="visualiser">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Roof visualiser</span>
+        <h2>See your roof before you buy.</h2>
+        <p class="lead">Choose a profile and a factory colour to preview it on a home. When it looks right, configure the sheet or price your whole roof.</p>
+      </div>
+      <div class="vis-layout reveal">
+        <div class="vis-frame" title="Click to configure this sheet">
+          <div class="vis-stage" id="vis-stage"></div>
+          <div class="vis-tag" id="vis-tag"><i></i><span></span></div>
+        </div>
+        <aside class="vis-panel" aria-label="Visualiser options">
+          <div class="vis-group">
+            <span class="vis-label">Profile</span>
+            <div class="vis-profiles" id="vis-profile"></div>
+          </div>
+          <div class="vis-group">
+            <span class="vis-label">Colour <em id="vis-colour-name"></em></span>
+            <div class="swatches" id="vis-colours"></div>
+          </div>
+          <div class="vis-summary">
+            <div><small>From</small><b id="vis-price"></b></div>
+            <span id="vis-cover"></span>
+          </div>
+          <div class="vis-actions">
+            <button type="button" class="btn btn-red" id="vis-config">Configure this sheet</button>
+            <button type="button" class="btn btn-ghost" id="vis-calc">Price my whole roof</button>
+          </div>
+        </aside>
+      </div>
+    </div>
   </section>
 
   <!-- ============ FEATURED ============ -->

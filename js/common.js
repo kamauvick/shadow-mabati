@@ -106,7 +106,7 @@
 
   /* ---------- chrome ---------- */
   function renderChrome() {
-    const nav = [["Products", "#products"], ["Calculator", "#calculator"], ["Why us", "#why"], ["About", "#about"], ["FAQ", "#faq"], ["Contact", "#contact"]];
+    const nav = [["Products", "#products"], ["Visualiser", "#visualiser"], ["Calculator", "#calculator"], ["Why us", "#why"], ["About", "#about"], ["FAQ", "#faq"], ["Contact", "#contact"]];
     const logo = `<img class="logo" src="assets/logo.png" alt="Shadow Mabati" width="900" height="460">`;
     document.body.insertAdjacentHTML("afterbegin", `
       ${CFG.showTopbar ? `<div class="topbar"><div class="wrap">

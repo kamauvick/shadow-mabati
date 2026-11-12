@@ -161,10 +161,14 @@
     const glass = nextId("gl");
     const rs = nextId("rs");
     const win = (x, y, w, h) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2" fill="url(#${glass})"/><rect x="${x + w / 2 - 1}" y="${y}" width="2" height="${h}" fill="#fff" opacity=".8"/><rect x="${x - 3}" y="${y + h}" width="${w + 6}" height="4" rx="1" fill="#d9d1c3"/>`;
-    return `<svg viewBox="0 0 500 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    // "meet" keeps the whole house visible in any frame shape; the sky comes from the frame's
+    // background and the ground is extended past the edges so wide frames have no gaps.
+    return `<svg viewBox="0 0 500 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet" overflow="visible" aria-hidden="true">
       <defs>${p.defs}
         <linearGradient id="${glass}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9fc0e8"/><stop offset="1" stop-color="#3f6aa8"/></linearGradient>
       </defs>
+      <rect x="-900" y="270" width="900" height="200" fill="#c9d4bd"/><rect x="500" y="256" width="900" height="200" fill="#c9d4bd"/>
+      <rect x="-900" y="300" width="900" height="200" fill="#b3c3a4"/><rect x="500" y="288" width="900" height="200" fill="#b3c3a4"/>
       <circle cx="420" cy="70" r="34" fill="#fff" opacity=".55"/>
       <circle cx="420" cy="70" r="22" fill="#ffe7b8" opacity=".9"/>
       <path d="M0 270 C 90 240 170 250 260 262 C 350 274 420 250 500 256 V360 H0Z" fill="#c9d4bd"/>
@@ -195,6 +199,31 @@
     </svg>`;
   }
 
+  /* ---------- hero: one long box-profile sheet lying on a slant ----------
+     Drawn flat in local coordinates (length L × width H, ribs along the length),
+     then mapped onto a slanted parallelogram with an affine matrix. */
+  function heroSheetArt(hex) {
+    const c = hex, L = 1000, H = 360;
+    const p = patternDefs("box", c, 1.15);
+    const defs = p.defs.replace("<pattern ", `<pattern patternTransform="rotate(90)" `); // ribs run along the sheet
+    const sheen = nextId("sh");
+    // long edge u = (780, -450), short edge v = (230, 330), origin A = (40, 470)
+    const m = `matrix(${780 / L} ${-450 / L} ${230 / H} ${330 / H} 40 470)`;
+    return `<svg viewBox="0 0 1100 900" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMin meet" aria-hidden="true">
+      <defs>${defs}
+        <linearGradient id="${sheen}" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#000" stop-opacity=".18"/><stop offset=".35" stop-color="#fff" stop-opacity=".22"/>
+          <stop offset=".55" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".12"/>
+        </linearGradient>
+      </defs>
+      <g transform="${m}">
+        <rect width="${L}" height="${H}" fill="url(#${p.id})"/>
+        <rect width="${L}" height="${H}" fill="url(#${sheen})"/>
+        <rect y="${H}" width="${L}" height="9" fill="${shade(c, -0.55)}"/>
+      </g>
+    </svg>`;
+  }
+
   /* ---------- about: stacked sheets ---------- */
   function factoryArt() {
     const sheets = [
@@ -222,5 +251,5 @@
     leanto: `<svg viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M6 12 58 22"/><path d="M12 13v21h40V21"/></svg>`,
   };
 
-  window.SMArt = { shade, sheetArt, houseArt, factoryArt, roofIcons };
+  window.SMArt = { shade, sheetArt, houseArt, heroSheetArt, factoryArt, roofIcons };
 })();

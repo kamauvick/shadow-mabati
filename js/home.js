@@ -2,23 +2,43 @@
   const S = window.SM, A = window.SMArt, CFG = window.SM_CONFIG;
   const { $, $$, esc, fmt, ICON } = S;
 
-  /* ---------- Hero visualiser ---------- */
-  const visProfiles = [["Box", "box-profile"], ["Tile", "versatile-tile"], ["Euro", "euro-tile"], ["Corrugated", "corrugated"], ["Stone", "stone-coated"]];
+  /* ---------- Hero: decorative slanted sheet ---------- */
+  const heroSheet = $("#hero-sheet");
+  if (heroSheet) heroSheet.innerHTML = A.heroSheetArt(S.colourHex("Maroon"));
+
+  /* ---------- Roof visualiser section ---------- */
+  const visProfiles = ["box-profile", "versatile-tile", "euro-tile", "corrugated", "stone-coated"];
   const vis = { pid: "versatile-tile", colour: "Maroon" };
   function renderVis() {
     const p = S.byId(vis.pid);
     if (!p.colours.includes(vis.colour)) vis.colour = p.colours[0];
     $("#vis-stage").innerHTML = A.houseArt(p.profile, S.colourHex(vis.colour));
-    $("#vis-profile").innerHTML = visProfiles.map(([l, id]) => `<button type="button" data-pid="${id}" aria-pressed="${id === vis.pid}">${l}</button>`).join("");
+    // each profile thumbnail is drawn in the chosen colour where that profile offers it
+    $("#vis-profile").innerHTML = visProfiles.map((id) => {
+      const q = S.byId(id);
+      const col = q.colours.includes(vis.colour) ? vis.colour : q.colours[0];
+      return `<button type="button" class="vis-profile" data-pid="${id}" aria-pressed="${id === vis.pid}">
+        <span class="vp-thumb">${S.artFor(q, col)}</span>
+        <span class="vp-text"><b>${esc(q.name)}</b><small>from ${fmt(S.fromPrice(q))}${S.isSheet(q) ? "/m" : "/tile"}</small></span>
+      </button>`;
+    }).join("");
     $("#vis-colours").innerHTML = p.colours.map((c) => `<button type="button" class="swatch" data-c="${esc(c)}" title="${esc(c)}" aria-label="${esc(c)}" aria-pressed="${c === vis.colour}" style="background:${S.colourHex(c)}"></button>`).join("");
+    $("#vis-colour-name").textContent = `· ${vis.colour}`;
     $("#vis-tag i").style.background = S.colourHex(vis.colour);
     $("#vis-tag span").textContent = `${p.name} · ${vis.colour}`;
-    $("#vis-price b").textContent = `${fmt(S.fromPrice(p))}${S.isSheet(p) ? "/m" : "/tile"}`;
+    $("#vis-price").textContent = `${fmt(S.fromPrice(p))}${S.isSheet(p) ? " / metre" : " / tile"}`;
+    $("#vis-cover").textContent = S.isSheet(p) ? `${p.cover} m cover · ${p.gauges.map((g) => `G${g}`).join(", ")}` : `${p.perSqm} tiles per m²`;
   }
-  $(".visualiser").addEventListener("click", (e) => {
+  $("#visualiser").addEventListener("click", (e) => {
     const b = e.target.closest("[data-pid]"); if (b) { vis.pid = b.dataset.pid; renderVis(); }
-    const c = e.target.closest("[data-c]"); if (c) { vis.colour = c.dataset.c; renderVis(); }
-    if (e.target.closest(".vis-top")) S.openProduct(vis.pid, { colour: vis.colour });
+    const c = e.target.closest("#vis-colours [data-c]"); if (c) { vis.colour = c.dataset.c; renderVis(); }
+    if (e.target.closest(".vis-frame, #vis-config")) S.openProduct(vis.pid, { colour: vis.colour });
+    if (e.target.closest("#vis-calc")) {
+      // carry the chosen sheet and colour into the calculator
+      st.pid = vis.pid; st.colour = vis.colour; $("#cprod").value = vis.pid;
+      renderOptions(); compute();
+      $("#calculator").scrollIntoView({ behavior: "smooth" });
+    }
   });
   renderVis();
 
