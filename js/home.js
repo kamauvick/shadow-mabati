@@ -219,7 +219,7 @@
   const track = $("#t-track");
   $("#t-prev").innerHTML = `<span style="transform:rotate(180deg);display:grid">${ICON.arrow}</span>`;
   $("#t-next").innerHTML = ICON.arrow;
-  const step = () => ($(".t-card", track).offsetWidth + 18);
+  const step = () => ($(".t-card", track).offsetWidth + 24);
   $("#t-prev").onclick = () => track.scrollBy({ left: -step(), behavior: "smooth" });
   $("#t-next").onclick = () => track.scrollBy({ left: step(), behavior: "smooth" });
 

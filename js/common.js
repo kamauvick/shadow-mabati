@@ -681,11 +681,14 @@
         ${p.badge ? `<span class="pc-badge ${p.badge === "Best seller" ? "red" : ""}">${esc(p.badge)}</span>` : ""}</div>
       ${compare ? `<label class="pc-compare"><input type="checkbox" data-compare="${p.id}"> Compare</label>` : ""}
       <div class="pc-body">
-        <div class="pc-cat">${esc(p.category)}</div>
         <h3 class="pc-title">${esc(p.name)}</h3>
         <p class="pc-desc">${esc(p.short)}</p>
         <div class="pc-meta">
-          <div class="pills">${(p.gauges || []).map((g) => `<span class="pill">G${g}</span>`).join("")}${isSheet(p) ? `<span class="pill blue">${p.cover} m cover</span>` : ""}${p.unit === "tile" ? `<span class="pill blue">${p.perSqm} / m²</span>` : ""}</div>
+          <div class="pc-specs">${[
+            p.gauges && p.gauges.length ? `<b>${p.gauges.map((g) => `G${g}`).join(" · ")}</b>` : "",
+            isSheet(p) ? `${p.cover} m cover` : "",
+            p.unit === "tile" ? `${p.perSqm} tiles / m²` : "",
+          ].filter(Boolean).join(" &nbsp;·&nbsp; ") || esc(p.category)}</div>
           ${colours.length ? `<div class="dots">${colours.slice(0, 5).map((c) => `<i style="background:${colourHex(c)}" title="${esc(c)}"></i>`).join("")}${colours.length > 5 ? `<em>+${colours.length - 5}</em>` : ""}</div>` : ""}
         </div>
         <div class="pc-foot">
